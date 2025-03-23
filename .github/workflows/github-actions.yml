@@ -6,7 +6,7 @@ on:
     branches: ['master']
 
 env:
-  IMAGE_NAME: fetch-app
+  IMAGE_NAME: ${{ github.actor }}/fetch-app
   GITHUB_REGISTRY: ghcr.io
   DOCKER_IMAGE: ${{ github.repository }}
   DOCKER_BUILDKIT: 1
