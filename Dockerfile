@@ -30,4 +30,4 @@ COPY --from=builder --chown=remix:remix /app/. ./
 RUN npm install --omit=dev
 EXPOSE 3000
 
-CMD ["npm", "run", "start-prod"]
+CMD ["npm", "run", "start"]
