@@ -204,7 +204,7 @@ const DataTable = ({
 
   const handleNext = () => {
     const pointer = from;
-    if (pointer + size > total) {
+    if (pointer + size >= total - size) {
       return;
     }
     paginateFetch(pointer);
@@ -329,7 +329,7 @@ const DataTable = ({
       {!!data && total && <div>Total Results: {total}</div>}
       {!!from && (
         <div>
-          Showing results: {from - size} - {from}
+          Showing results: {from - size} - {Math.min(total, from)}
         </div>
       )}
       <div className="flex flex-row">
@@ -345,7 +345,7 @@ const DataTable = ({
           variant="outline"
           size="sm"
           onClick={handleNext}
-          disabled={!!(from + size > total)}
+          disabled={!!(from + size >= total - size)}
         >
           Next
         </Button>

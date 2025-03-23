@@ -44,7 +44,7 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
     if (zipArr.length) {
       const zipSet = new Set([...selectedZipCodes, ...zipArr]);
       const zipArray = Array.from(zipSet);
-      updateSearchParams('zipcodes', zipArray);
+      updateSearchParams('zipCodes', zipArray);
     }
 
     setInput('');
@@ -53,7 +53,7 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
 
   const handleRemoveZip = (zip: string) => {
     const zipArray = selectedZipCodes.filter((z) => z !== zip);
-    updateSearchParams('zipcodes', zipArray);
+    updateSearchParams('zipCodes', zipArray);
   };
 
   return (

@@ -21,7 +21,7 @@ import { Dog, SearchData } from './dogs.search';
 
 export interface SearchParams {
   breeds?: string[];
-  zipcodes?: string[];
+  zipCodes?: string[];
   ageMin?: number;
   ageMax?: number;
   size?: number;
@@ -126,9 +126,9 @@ const Dogs = () => {
       });
     }
 
-    if (searchParams.zipcodes?.length) {
-      searchParams.zipcodes.forEach((z) => {
-        params.append('zipcodes', z);
+    if (searchParams.zipCodes?.length) {
+      searchParams.zipCodes.forEach((z) => {
+        params.append('zipCodes', z);
       });
     }
 
@@ -208,7 +208,7 @@ const Dogs = () => {
             updateSearchParams={updateSearchParams}
           />
           <ZipCodeInput
-            selectedZipCodes={searchParams.zipcodes || []}
+            selectedZipCodes={searchParams.zipCodes || []}
             updateSearchParams={updateSearchParams}
           />
           <AgeInput
