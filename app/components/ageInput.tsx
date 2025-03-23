@@ -20,7 +20,12 @@ const AgeInput = ({ ageMin, ageMax, updateSearchParams }: Props) => {
         min="0"
         max="30"
         placeholder="Min Age"
-        onChange={(e) => updateSearchParams('ageMin', e.target.value)}
+        onChange={(e) => {
+          if (parseInt(e.target.value) < 0 || parseInt(e.target.value) > 30) {
+            return;
+          }
+          updateSearchParams('ageMin', e.target.value);
+        }}
         className="truncate italic min-w-[150px]"
       />
       <Input
@@ -29,7 +34,12 @@ const AgeInput = ({ ageMin, ageMax, updateSearchParams }: Props) => {
         min="0"
         max="30"
         placeholder="Max Age"
-        onChange={(e) => updateSearchParams('ageMax', e.target.value)}
+        onChange={(e) => {
+          if (parseInt(e.target.value) < 0 || parseInt(e.target.value) > 30) {
+            return;
+          }
+          updateSearchParams('ageMax', e.target.value);
+        }}
         className="truncate italic min-w-[150px]"
       />
     </div>

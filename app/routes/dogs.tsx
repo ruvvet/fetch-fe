@@ -219,7 +219,11 @@ const Dogs = () => {
 
           <div className="flex items-center"></div>
         </div>
-        <Button onClick={dogsSearch} className="w-[100%]">
+        <Button
+          onClick={dogsSearch}
+          className="w-[100%]"
+          disabled={fetcher.state !== 'idle'}
+        >
           Search
         </Button>
       </div>

@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, redirect, Session } from '@remix-run/node';
+import { LoaderFunctionArgs, Session } from '@remix-run/node';
 import { middlewareSessionAuth, throwAuthRedirect } from '~/utils/api';
 
 export interface Dog {
@@ -47,7 +47,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (searchRes.status !== 200) {
-    await throwAuthRedirect(session)
+    await throwAuthRedirect(session);
   }
 
   const searchData = await searchRes.json();
@@ -69,7 +69,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (dataRes.status !== 200) {
-   await throwAuthRedirect(session)
+    await throwAuthRedirect(session);
   }
 
   const data = await dataRes.json();

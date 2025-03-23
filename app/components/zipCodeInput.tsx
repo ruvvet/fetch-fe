@@ -29,15 +29,24 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
   const [open, setOpen] = useState(false);
 
   const validateZip = (str: string) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(str);
+  const sanitizeZip = (str: string) => str.replace(/[^0-9]/g, '');
 
   const handleZipCode = (zip: string) => {
-    if (zip.length > 5 || !validateZip(zip)) {
-      return;
+    const zipArr = zip.split(',').reduce<string[]>((arr, zip) => {
+      const z = sanitizeZip(zip);
+      if (z.length > 5 || !validateZip(z)) {
+        return arr;
+      }
+      arr.push(z);
+      return arr;
+    }, []);
+
+    if (zipArr.length) {
+      const zipSet = new Set([...selectedZipCodes, ...zipArr]);
+      const zipArray = Array.from(zipSet);
+      updateSearchParams('zipcodes', zipArray);
     }
 
-    const zipSet = new Set([...selectedZipCodes, zip]);
-    const zipArray = Array.from(zipSet);
-    updateSearchParams('zipcodes', zipArray);
     setInput('');
     setOpen(false);
   };
@@ -68,10 +77,11 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
                 placeholder="Add ZipCode(s)"
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
-                onKeyUp={(e) => {
+                onKeyDown={(e) => {
+                  //TODO: figure out why keyup wasnt working
                   if (e.key === 'Enter') {
-                    handleZipCode(input);
                     e.preventDefault();
+                    handleZipCode(input);
                   }
                 }}
                 className="truncate italic"
@@ -93,7 +103,9 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
             className="w-[--radix-popover-trigger-width] p-0 bg-[#1a1a1a]"
           >
             <CommandList>
-              <CommandEmpty>Add multiple ZipCodes</CommandEmpty>
+              <CommandEmpty>
+                Add one or multiple comma separated zipcodes
+              </CommandEmpty>
               {!!selectedZipCodes.length && (
                 <CommandGroup>
                   {selectedZipCodes.map((i) => (
