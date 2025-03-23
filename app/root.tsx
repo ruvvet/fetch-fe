@@ -1,28 +1,43 @@
+import type { LinksFunction, MetaFunction } from '@remix-run/node';
 import {
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
-
-import "./tailwind.css";
+  useRouteError
+} from '@remix-run/react';
+import './tailwind.css';
+import styles from './tailwind.css?url';
 
 export const links: LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous'
   },
   {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
+    rel: 'stylesheet',
+    href: styles
+  }
 ];
 
+export const meta: MetaFunction = () => [
+  { title: 'Fetch-FE' },
+  { property: 'og:title', content: 'Fetch-FE-App' }
+];
+
+export const loader = async () => {
+  const nodeEnv = process.env.NODE_ENV;
+  const remixDevPort = Number(process.env.REMIX_DEV_SERVER_WS_PORT || 8002);
+  return { nodeEnv, remixDevPort };
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  // const { nodeEnv, remixDevPort } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -33,13 +48,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <ScrollRestoration />
         <Scripts />
+        <ScrollRestoration />
+        {/* {nodeEnv === 'development' ? <LiveReload port={remixDevPort} /> : null} */}
       </body>
     </html>
   );
 }
 
-export default function App() {
-  return <Outlet />;
+const App = () => <Outlet />;
+export default App;
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h1>Error!</h1>
+      <p>{(error as { message: string })?.message! ?? 'Unknown error'}</p>
+    </>
+  );
 }
