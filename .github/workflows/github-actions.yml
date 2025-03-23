@@ -32,6 +32,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}>:next
+          tags: ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}:next
 
       - run: echo "This job's status is ${{ job.status }}."
