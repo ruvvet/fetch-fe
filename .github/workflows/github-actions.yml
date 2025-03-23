@@ -6,53 +6,49 @@ on:
     branches: ['master']
 
 env:
-  IMAGE_NAME: ${{ github.actor }}/fetch-app
-  GITHUB_REGISTRY: ghcr.io
-  DOCKER_IMAGE: ${{ github.repository }}
-  DOCKER_BUILDKIT: 1
-  DOCKER_CLI_AGGREGATE: 1
+  IMAGE_NAME: fetch-fe
+  PROJECT_ID: ruvvet
+  REGION: us-central1
+  AR_URL: us-central1-docker.pkg.dev/ruvvet/fetch-fe
+  SERVICE_ACCOUNT: github-actions@ruvvet.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/258552781147/locations/global/workloadIdentityPools/github-actions/providers/github-actions
 
 jobs:
-  build-push-docker-image:
+  build-docker-image:
     runs-on: ubuntu-latest
     permissions:
-      packages: write
-      contents: read
-      attestations: write
-      id-token: write
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - id: checkout
-        name: Checkout
-        uses: actions/checkout@v4
+        name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Log in to the Container registry
+      - id: auth
+        name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - id: docker-auth
+        name: Docker Auth
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.GITHUB_REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+          registry: us-central1-docker.pkg.dev
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
+      - id: build-image
+        name: Build Docker image
+        run: docker build -t "${{ env.AR_URL }}/${{ env.IMAGE_NAME }}" ./
 
-      - id: push
-        name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ${{ env.GITHUB_REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+      - name: Build and Push Container
+        run: |-
+          docker build -t "${{ env.AR_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" ./
+          docker push "${{ env.AR_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
 
       - run: echo "This job's status is ${{ job.status }}."
