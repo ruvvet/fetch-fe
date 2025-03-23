@@ -5,15 +5,25 @@ export const middlewareSessionAuth = async (req: Request) => {
   const session = await getSession(req.headers.get('Cookie'));
   const cookie = session.get('token');
   if (!session || !cookie) {
-    await destroySession(session);
-    throw redirect('/auth', {
-      headers: {
-        'Set-Cookie': await destroySession(session)
-      }
-    });
+    // await destroySession(session);
+    // throw redirect('/auth', {
+    //   headers: {
+    //     'Set-Cookie': await destroySession(session)
+    //   }
+    // });
+    await throwAuthRedirect(session);
   }
 
   return session;
+};
+
+export const throwAuthRedirect = async (session: Session) => {
+  await destroySession(session);
+  throw redirect('/auth', {
+    headers: {
+      'Set-Cookie': await destroySession(session)
+    }
+  });
 };
 
 //TODO: app fetch wrapper to handle fetch logic across app

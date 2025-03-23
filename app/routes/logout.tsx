@@ -28,7 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
   }
 
-  throw redirect('/auth');
+  return null;
 };
 
 const Logout = () => {

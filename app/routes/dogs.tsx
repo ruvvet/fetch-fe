@@ -16,7 +16,7 @@ import { Button } from '~/components/ui/button';
 import { Spinner } from '~/components/ui/spinner';
 import ZipCodeInput from '~/components/zipCodeInput';
 import { commitSession, destroySession } from '~/session';
-import { middlewareSessionAuth } from '~/utils/api';
+import { middlewareSessionAuth, throwAuthRedirect } from '~/utils/api';
 import { Dog, SearchData } from './dogs.search';
 
 export interface SearchParams {
@@ -49,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (res.status !== 200) {
-    throw redirect('/auth');
+    await throwAuthRedirect(session);
   }
 
   const allBreeds: string[] = await res.json();
@@ -147,8 +147,6 @@ const Dogs = () => {
     if (searchParams.from) {
       params.append('from', `${searchParams.from}`);
     }
-
-    
 
     fetcher.submit(params, {
       method: 'GET',

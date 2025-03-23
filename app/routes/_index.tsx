@@ -1,6 +1,6 @@
-import { LoaderFunctionArgs, Session } from '@remix-run/node';
-import { Outlet, redirect } from '@remix-run/react';
-import { middlewareSessionAuth } from '~/utils/api';
+import { LoaderFunctionArgs, redirect, Session } from '@remix-run/node';
+import { Outlet } from '@remix-run/react';
+import { middlewareSessionAuth, throwAuthRedirect } from '~/utils/api';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await middlewareSessionAuth(request);
@@ -8,6 +8,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (session && cookie) {
     throw redirect('/dogs');
   }
+
+  await throwAuthRedirect(session);
+
   return null;
 };
 

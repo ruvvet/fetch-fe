@@ -32,7 +32,6 @@ const formSchema = z.object({
     .string()
     .min(1, { message: 'This field has to be filled.' })
     .email('This is not a valid email.')
-  //   .refine((e) => e === "abcd@fg.com", "This email is not in our database")
 });
 
 export const meta: MetaFunction = () => {
@@ -73,8 +72,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const token = res.headers.get('Set-Cookie');
 
     if (res.status !== 200 || !token) {
-      //TODO: some popup error here
-      return;
+      throw new Error('Session Error');
     }
 
     session.set('token', token);
@@ -86,7 +84,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
   }
 
-  throw new Response(null, { status: 401 }); //TODO: some more err handling
+  return null;
 };
 
 const Auth = () => {

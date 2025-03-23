@@ -114,7 +114,17 @@ const DataTable = ({
     },
     {
       accessorKey: 'breed',
-      header: 'Breed',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Breed
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => <div>{row.getValue('breed')}</div>
     },
     {

@@ -19,7 +19,7 @@ import {
 } from '~/components/ui/card';
 import { Spinner } from '~/components/ui/spinner';
 import { destroySession } from '~/session';
-import { middlewareSessionAuth } from '~/utils/api';
+import { middlewareSessionAuth, throwAuthRedirect } from '~/utils/api';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Fetch Match!' }];
@@ -44,7 +44,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (res.status !== 200) {
-    throw redirect('/auth');
+    await throwAuthRedirect(session);
   }
 
   const match = (await res.json()).match;
@@ -62,7 +62,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   if (dataRes.status !== 200) {
-    throw redirect('/auth');
+    await throwAuthRedirect(session);
   }
 
   const matchData = (await dataRes.json())[0];
