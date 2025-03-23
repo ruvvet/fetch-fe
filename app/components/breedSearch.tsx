@@ -96,7 +96,7 @@ const BreedSearch = ({ breeds, selectedBreeds, updateSearchParams }: Props) => {
                   debounceSearch(e as unknown as string);
                   setInput(e.target.value);
                 }}
-                className="truncate italic min-w-[300px]"
+                className="truncate italic"
                 value={input}
               />
             </CommandPrimitive.Input>

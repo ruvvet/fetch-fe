@@ -74,7 +74,7 @@ const ZipCodeInput = ({ selectedZipCodes, updateSearchParams }: Props) => {
                     e.preventDefault();
                   }
                 }}
-                className="truncate italic min-w-[300px]"
+                className="truncate italic"
               />
             </CommandPrimitive.Input>
           </PopoverAnchor>

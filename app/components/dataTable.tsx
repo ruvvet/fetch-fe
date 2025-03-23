@@ -298,8 +298,12 @@ const DataTable = ({
     </Table>
   );
 
+  if (!data.length) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col py-4">
+    <div className="flex flex-col py-4 min-w-[50%] max-w-[70%]">
       <div className="flex flex-row justify-between pb-4">
         <div>{renderColumnFilter()}</div>
         <div>{renderPaginationInput()}</div>
@@ -311,8 +315,13 @@ const DataTable = ({
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div> */}
       </div>
-      {!!total && <div>Total Results: {total}</div>}
-      Showing results: {from - size} - {from}
+
+      {!!data && total && <div>Total Results: {total}</div>}
+      {!!from && (
+        <div>
+          Showing results: {from - size} - {from}
+        </div>
+      )}
       <div className="flex flex-row">
         <Button
           variant="outline"

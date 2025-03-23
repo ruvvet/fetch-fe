@@ -1,40 +1,26 @@
-# Welcome to Remix!
+# Fetch-FE App
 
-- 📖 [Remix docs](https://remix.run/docs)
+Jenny Feng
+ - [portfolio](https://www.ruvvet.com)
+ - [github](https://www.github.com/ruvvet)
+ - [linkedin](https://www.linkedin.com/in/jcfeng/)
 
-## Development
 
-Run the dev server:
+ # Live link
+ https://fetch-fe-258552781147.us-central1.run.app
 
-```shellscript
-npm run dev
-```
+## Tech:
+ - Framework: React Remix
+ - Component Lib: ShadCN
+ - Deployed on google cloud w/ google registry + google run
 
-## Deployment
+## To run locally:
+ - `docker compose up --build`
+ - go to `http://localhost:3000/auth`
 
-First, build your app for production:
 
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+### Todos:
+ - Bring in the location apis for a state/city/geolocation search that returns zipcodes to select from/use
+ - incorporate the name/age sort in retrieving search results
+ - add global state management to store retrieved results to minimize search api calls
+ - more advanced error handling + messaging

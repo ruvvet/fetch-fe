@@ -148,6 +148,8 @@ const Dogs = () => {
       params.append('from', `${searchParams.from}`);
     }
 
+    
+
     fetcher.submit(params, {
       method: 'GET',
       action: `/dogs/search`
@@ -200,8 +202,8 @@ const Dogs = () => {
           <LogOut />
         </Button>
       </div>
-      <div className="flex flex-col min-w-[50%]">
-        <div className="flex flex-col sm:flex-row justify-between">
+      <div className="flex flex-col max-w-[60%]">
+        <div className="flex flex-col md:flex-row justify-between">
           <BreedSearch
             breeds={allBreeds}
             selectedBreeds={searchParams.breeds || []}
@@ -219,21 +221,21 @@ const Dogs = () => {
 
           <div className="flex items-center"></div>
         </div>
-        <Button onClick={dogsSearch}>Search</Button>
+        <Button onClick={dogsSearch} className="w-[100%]">
+          Search
+        </Button>
       </div>
-      <div className="min-w-[70%]">
-        <DataTable
-          data={data}
-          total={total}
-          isLoading={fetcher.state === 'loading'}
-          from={parseInt(`${searchParams.from || 0}`)}
-          size={parseInt(`${searchParams.size || 25}`)}
-          paginateFetch={paginateFetch}
-          favorites={favorites}
-          updateFavorites={updateFavorites}
-          updateSearchParams={updateSearchParams}
-        />
-      </div>
+      <DataTable
+        data={data}
+        total={total}
+        isLoading={fetcher.state === 'loading'}
+        from={parseInt(`${searchParams.from || 0}`)}
+        size={parseInt(`${searchParams.size || 25}`)}
+        paginateFetch={paginateFetch}
+        favorites={favorites}
+        updateFavorites={updateFavorites}
+        updateSearchParams={updateSearchParams}
+      />
       {!!favorites.length && <Button onClick={handleMatch}>MATCH</Button>}
       <FavoriteDogs favorites={favorites} updateFavorites={updateFavorites} />
     </div>
